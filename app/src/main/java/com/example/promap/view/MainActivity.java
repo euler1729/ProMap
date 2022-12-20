@@ -1,0 +1,49 @@
+package com.example.promap.view;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+
+import com.example.promap.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+public class MainActivity extends AppCompatActivity{
+    public static Menu menu;
+    Fragment selectedFragment;
+    Navigator navigator = new Navigator();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavBar);
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().hide();
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,
+                new DashboardFragment()).commit();
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.dashboardFragment:
+                    selectedFragment = new DashboardFragment();
+                    break;
+                case R.id.mapFragment:
+                    selectedFragment = new MapFragment();
+                    break;
+                case R.id.accountFragment:
+                    selectedFragment = new AccountFragment();
+                    break;
+                default:
+                    selectedFragment = null;
+                    break;
+            }
+            assert selectedFragment != null;
+            getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,
+                    selectedFragment).commit();
+            return true;
+        });
+    }
+}
