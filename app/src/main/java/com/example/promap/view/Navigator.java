@@ -10,7 +10,7 @@ import com.example.promap.R;
 public class Navigator {
     private Fragment fragment;
 
-    public void navToHome(FragmentActivity activity){
+    public void navToDashboard(FragmentActivity activity){
         fragment = new DashboardFragment();
         commit(activity,fragment);
     }
