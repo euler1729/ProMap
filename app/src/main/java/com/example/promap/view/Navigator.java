@@ -18,6 +18,14 @@ public class Navigator {
         fragment = new MapFragment();
         commit(activity,fragment);
     }
+    public void navToRegister(FragmentActivity activity){
+        fragment = new RegistrationFragment();
+        commit(activity,fragment);
+    }
+    public void navToLogin(FragmentActivity activity){
+        fragment = new LoginFragment();
+        commit(activity,fragment);
+    }
 
     private void commit(FragmentActivity activity, Fragment fragment){
         FragmentManager fragmentManager = activity.getSupportFragmentManager();

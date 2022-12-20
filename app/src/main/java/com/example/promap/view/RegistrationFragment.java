@@ -1,44 +1,46 @@
 package com.example.promap.view;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.promap.R;
+import com.example.promap.databinding.FragmentRegistrationBinding;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegistrationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RegistrationFragment extends Fragment {
+public class RegistrationFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+    private FragmentRegistrationBinding binding;
+    private FragmentActivity activity;
+    private View view;
+    private Spinner spinner;
+    private Navigator navigator=new Navigator();
+    Button loginBtn;
+    Button registerBtn;
+    String role;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    String[] roles = {"ECNEC", "MOP", "EXEC", "APP"};
 
     public RegistrationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static RegistrationFragment newInstance(String param1, String param2) {
         RegistrationFragment fragment = new RegistrationFragment();
         Bundle args = new Bundle();
@@ -51,16 +53,40 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        activity = requireActivity();
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_registration, container, false);
+        view = binding.getRoot();
+
+        spinner = view.findViewById(R.id.spinner2);
+        spinner.setOnItemSelectedListener(this);
+        ArrayAdapter ad = new ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, roles);
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(ad);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        registerBtn = view.findViewById(R.id.registration_btn);
+        loginBtn = view.findViewById(R.id.registration_login_btn);
+
+        // On login button click navigate to login page
+        loginBtn.setOnClickListener(View-> navigator.navToLogin(activity));
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Toast.makeText(requireContext(), roles[position], Toast.LENGTH_LONG)
+                .show();
+        role = roles[position];
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 }
