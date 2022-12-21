@@ -6,16 +6,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.promap.R;
 import com.example.promap.databinding.FragmentLoginBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class LoginFragment extends Fragment {
     private Navigator navigator = new Navigator();
     private FragmentLoginBinding binding;
@@ -45,6 +53,35 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+        try {
+            // Send a GET request to the API endpoint
+            URL url = new URL("https://44d7-103-221-253-171.in.ngrok.io/projects");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            // Read the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            // Parse the JSON response
+            JSONObject json = new JSONObject(response.toString());
+            Toast.makeText(requireContext(), json.toString(), Toast.LENGTH_SHORT).show();
+            Log.d("test12", json.toString());
+
+            // Do something with the JSON data...
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
         Button loginBtn = view.findViewById(R.id.login_btn);
         loginBtn.setOnClickListener(v->{
             BottomNavigationView navView =(BottomNavigationView) requireActivity().findViewById(R.id.bottomNavBar);

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity{
         String token = preferences.getString("token",null);
         if(token==null){
             bottomNavigationView.setVisibility(View.INVISIBLE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,new LoginFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,new LoginFragment()).addToBackStack(null).commit();
         }
         else{
             getSupportFragmentManager().beginTransaction().replace(R.id.id_fragment_controller,
